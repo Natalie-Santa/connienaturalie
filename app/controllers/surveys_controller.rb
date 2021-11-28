@@ -26,7 +26,21 @@ class SurveysController < ApplicationController
      ####
     #Fin registrar en base de datos
     ####
+    pusher = Pusher::Client.new(
+      app_id: '1307069',
+      key: 'f28603fdfb655861ddca',
+      secret: 'ee338125b0e06dfd52dc',
+      cluster: 'mt1',
+      encrypted: true
+    )
+    #[gesturex] indica tu votación, survey.where busca cuantos votos con este gesto hay
+    noti = {}
+    noti[gesturex] = Survey.where(gesture: gesturex).count
 
+    #se envia notificacion
+    pusher.trigger('my-channel', 'my-event', {
+      message: noti
+    })
 
     redirect_to :surveys_thankyou
   end
